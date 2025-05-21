@@ -59,5 +59,11 @@
                 margin: 0;
             }
         }
+        @media(max-width: 575px){
+            width: inherit;
+            height: inherit;
+            transition: all ease .3s;
+            overflow-y: auto;
+        }
     }
 </style>

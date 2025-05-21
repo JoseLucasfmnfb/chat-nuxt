@@ -16,5 +16,8 @@
     .chat{
         display: flex;
         max-width: 100%;
+        @media(max-width: 575px){
+            flex-direction: column;
+        }
     }
 </style>
