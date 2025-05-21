@@ -4,6 +4,8 @@
             v-for="item in items"
             :key="item.id"
             class="card"
+            :class="{ selected: item.id === selectedId }"
+            @click="$emit('select', item)"
         >
             <img :src="item.avatar" alt="avatar" class="avatar" >
             <div class="info">
@@ -22,6 +24,7 @@
             title: string
             message: string
         }[]
+        selectedId: string | number | null
     }>()
 </script>
 
@@ -49,7 +52,6 @@
             object-fit: cover;
             margin-right: 12px;
         }
-
         .info {
             .title {
                 font-size: 16px;
@@ -70,7 +72,6 @@
                 overflow: hidden;
             }
         }
-
         &.selected {
             background-color: $color-fill-primary-0;
             .info {
@@ -79,11 +80,9 @@
                 }
             }
         }
-
         &.active {
             background-color: $color-fill-primary-1;
         }
-
         &:hover {
             background-color: $color-fill-primary-0;
         }

@@ -1,33 +1,31 @@
 <template>
     <div class="chat-messages">
-      <div
-        v-for="msg in messages"
-        :key="msg.id"
-        :class="['message-box', msg.senderType === 'self' ? 'sent' : 'received']"
-      >
-        <div class="content">
-          <p class="text">{{ msg.text }}</p>
-          <span class="time">{{ msg.time }}</span>
+        <div
+            v-for="msg in chatStore.messages"
+            :key="msg.id"
+            :class="['message-box', msg.isReceivedMsg ? 'sent' : 'received']"
+        >
+            <div class="content">
+                <p class="text">
+                    <img v-if="msg.file" :src="msg.file" alt="image" class="image" >
+                    {{ msg.text }}
+                </p>
+                <span class="time">{{ formatTime(msg.sendAt) }}</span>
+            </div>
         </div>
-      </div>
     </div>
-  </template>
+</template>
   
-  <script setup lang="ts">
-    const props = defineProps<{
-        messages: {
-            id: number
-            senderType: 'self' | 'other'
-            text: string
-            time: string
-        }[]
-    }>()
+ <script setup lang="ts">
+    import { useChatStore } from '~/stores/chat';
+    const { formatTime } = useFormatTime()
+    const chatStore = useChatStore()
 </script>
 
 <style scoped lang="scss">
     .chat-messages {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         gap: 8px;
         padding: 12px;
     }
@@ -47,6 +45,11 @@
             padding: 14px 20px;
             border-style: solid;
             border-width: 1px;
+            display: flex;
+            flex-direction: column;
+            .image {
+                max-width: 320px;
+            }
         }
 
         .time {

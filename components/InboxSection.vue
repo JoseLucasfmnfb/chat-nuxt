@@ -3,35 +3,39 @@
         <div class="inboxTittle">
             <h2>Minhas mensagens</h2>
         </div>
-        <CardList :items="mockData"/>
+        <CardList
+            :items="formattedChats"
+            :selected-id="selectedChatId"
+            @select="handleSelect"
+        />
     </div>
 </template>
 
-<script setup>
-    import avatar1 from '@/assets/images/agostinho.png'
-    import avatar2 from '@/assets/images/beicola.png'
-    import avatar3 from '@/assets/images/lineu.png'
-    const mockData = [
-        {
-            id: 1,
-            avatar: avatar1,
-            title: 'Agostinho Carrara',
-            message: '199,99'
-        },
-        {
-            id: 2,
-            avatar: avatar2,
-            title: 'Beiçola',
-            message: 'precisamos ver dos fiado, tem muita coisa sem pagar'
-        },
-        {
-            id: 3,
-            avatar: avatar3,
-            title: 'Lineu Silva',
-            message: 'Sobre a inspeção do outro dia'
-        }
-    ]
+<script setup lang="ts">
+    import { useChatStore } from '@/stores/chat'
+    import { useChats } from '@/composables/useChats'
+    import { useMessages } from '@/composables/useMessages'
+    const chatStore = useChatStore()
+    const selectedChatId = ref<string | number | null>(null)
 
+    const { data } = await useChats()
+
+    const formattedChats = computed(() => {
+        return (data.value || []).map(chat => ({
+            id: chat.id,
+            avatar: chat.chatCustomer?.photo || '',
+            title: chat.chatCustomer?.name || 'Sem nome',
+            message: chat.lastMessage?.text || 'Sem mensagem',
+            raw: chat
+        }))
+    })
+
+    async function handleSelect(chat) {
+        selectedChatId.value = chat.id
+        chatStore.selectChat(chat.raw)
+        const messages = await useMessages(chat.id)
+        chatStore.setMessages(messages || [])
+    }
 </script>
 
 <style lang="scss" scoped>

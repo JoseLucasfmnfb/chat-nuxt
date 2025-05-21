@@ -6,8 +6,7 @@
 </template>
 
 <script setup>
-    const response = await useChats()
-    console.log('response -->>', response.data)
+
 </script>
 
 <style lang="scss" scoped>

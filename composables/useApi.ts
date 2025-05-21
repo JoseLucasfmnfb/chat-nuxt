@@ -1,7 +1,6 @@
 export function useApi() {
     const config = useRuntimeConfig()
     const token = useCookie('access_token').value
-    console.log('token -->>', token)
 
     async function request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const headers: HeadersInit = {
@@ -13,12 +12,13 @@ export function useApi() {
         if (token) {
             headers['Authorization'] = `Bearer ${token}`
         }
+        
+        if (!token && config.public.ACCESS_TOKEN) {
+            headers['Authorization'] = `Bearer ${config.public.ACCESS_TOKEN}`
+        }
 
         const baseUrl = config.public.BASE_API_URL
         const url = endpoint.startsWith('http') ? endpoint : `${baseUrl}${endpoint}`
-
-        console.log('baseUrl -->>', baseUrl)
-        console.log('url -->>', url)
 
         const res = await fetch(url, {
             ...options,

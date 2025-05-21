@@ -1,13 +1,12 @@
 <template>
-    <div class="headerSection">
-        <img :src="avatar1" alt="avatar" class="avatar" >
-        <h2 class="title">Agostinho Carrara</h2>
+    <div v-if="chatStore.selectedChatCustomer" class="headerSection">
+        <img :src="chatStore.selectedChatCustomer.photo" alt="avatar" class="avatar" >
+        <h2 class="title">{{ chatStore.selectedChatCustomer.name }}</h2>
     </div>
 </template>
 
 <script setup>
-    import avatar1 from '@/assets/images/agostinho.png'
-
+    const chatStore = useChatStore()
 </script>
 
 <style lang="scss" scoped>
@@ -16,6 +15,7 @@
         align-items: center;
         padding: 0 16px;
         height: 64px;
+        min-height: 64px;
         .avatar {
             width: 40px;
             height: 40px;

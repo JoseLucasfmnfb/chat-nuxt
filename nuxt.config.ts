@@ -35,6 +35,16 @@ export default defineNuxtConfig({
 			TOKEN_ENDPOINT: process.env.TOKEN_ENDPOINT,
 			AUTH_URL: process.env.AUTH_URL,
 			BASE_API_URL: process.env.BASE_API_URL,
+			ACCESS_TOKEN: process.env.ACCESS_TOKEN,
+		}
+	},
+	nitro: {
+		devProxy: {
+			'/api/': {
+				target: process.env.BASE_API_URL, // substitua com sua URL real
+				changeOrigin: true,
+				prependPath: true
+			}
 		}
 	},
 	modules: [
@@ -45,6 +55,7 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@nuxt/scripts',
 		//'@nuxt/test-utils',
-		'@nuxt/ui'
+		'@nuxt/ui',
+		'@pinia/nuxt'
 	]
 })

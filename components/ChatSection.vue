@@ -1,109 +1,35 @@
 <template>
-    <div class="chatSection">
-        <ChatMessage :messages="mockMessages"/>
-        <div ref="messagesEnd" />
+    <div ref="scrollContainer" class="chatSection">
+        <ChatMessage />
+        <div ref="topAnchor" />
     </div>
 </template>
 
-<script setup>
-    const scrollToBottom = (smooth = true) => {
+<script setup lang="ts">
+    import { ref, nextTick, onMounted, onUpdated } from 'vue'
+    import { useChatStore } from '@/stores/chat'
+
+    const chatStore = useChatStore()
+    const scrollContainer = ref(null)
+    const messagesEnd = ref(null)
+    
+    const scrollToBottom = () => {
         nextTick(() => {
-            messagesEnd.value?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
+            if (scrollContainer.value) {
+            scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight
+            }
         })
     }
     onMounted(() => {
         scrollToBottom(false)
     })
-
     onUpdated(() => {
         scrollToBottom()
     })
-    const mockMessages = [
-        {
-            id: 1,
-            senderType: 'self',
-            text: 'Fala mano! Pronto pro treino hoje?',
-            time: '14:35'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 2,
-            senderType: 'other',
-            text: 'Sempre! Hoje o domínio vai ser insano!',
-            time: '14:36'
-        },
-        {
-            id: 3,
-            senderType: 'self',
-            text: 'KKKK quero ver!',
-            time: '14:36'
-        },
-        {
-            id: 4,
-            senderType: 'other',
-            text: 'Traz as cartas de Digimon depois!',
-            time: '14:37'
-        }
-    ]
+    watch(
+        () => chatStore.messages.length,
+        () => scrollToBottom(),
+    )
 </script>
 
 <style lang="scss" scoped>
