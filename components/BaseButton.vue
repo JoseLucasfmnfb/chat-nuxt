@@ -80,5 +80,11 @@
         &--full {
             width: 100%;
         }
+
+        &:disabled {
+            background-color: $color-fill-neutral-low-4;
+            border-color: $color-fill-neutral-low-4;
+            color: $color-text-on-neutral-low-disabled;
+        }
     }
 </style>

@@ -7,7 +7,7 @@
                 placeholder="Digite sua mensagem..."
                 rows="2"
                 class="text-area"
-                @keydown.enter.exact.prevent="emitMessage"
+                @keydown.enter.exact.prevent="handleEnter"
             />
             <!-- Área de anexos -->
             <div v-if="imagePreview || true" class="attachment-area" :class="{ 'has-image': hasImage }">
@@ -16,16 +16,8 @@
                     <img :src="imagePreview" alt="Imagem anexada" >
                 </div>
                 <button class="icon-button" @click="toggleImage">
-                    <img
-                        v-if="hasImage"
-                        src="@/assets/icons/remove.svg"
-                        alt="Remover imagem"
-                    >
-                    <img
-                        v-else
-                        src="@/assets/icons/insert-image.svg"
-                        alt="Adicionar imagem"
-                    >
+                    <RemoveIcon v-if="hasImage" class="icon" />
+                    <InsertIcon v-else class="icon" />
                 </button>
     
                 <!-- Input escondido -->
@@ -36,6 +28,7 @@
             class="send-button"
             color="success"
             size="full"
+            :disabled="!canSend"
             @click="emitMessage"
         >
             Enviar
@@ -44,6 +37,8 @@
 </template>
   
 <script setup lang="ts">
+    import InsertIcon from '@/assets/icons/insert-image.svg'
+    import RemoveIcon from '@/assets/icons/remove.svg'
     const emit = defineEmits(['send'])
 
     const message = ref('')
@@ -51,6 +46,25 @@
     const fileInput = ref<HTMLInputElement | null>(null)
 
     const hasImage = computed(() => !!imagePreview.value)
+
+    const canSend = computed(() => {
+        return message.value.trim() !== '' || !!imagePreview.value
+    })
+
+    function handleEnter(event: KeyboardEvent) {
+        if (event.shiftKey) {
+            // Deixa o Enter funcionar normalmente como nova linha
+            return
+        }
+
+        // Só envia se canSend for true
+        if (canSend.value) {
+            emitMessage()
+        } else {
+            // Evita o Enter de fazer algo se não pode enviar
+            event.preventDefault()
+        }
+    }
 
     function emitMessage() {
         if (message.value.trim() === '') return
@@ -90,6 +104,7 @@
         flex-direction: column;
         padding: 16px 24px;
         gap: 8px;
+        flex-shrink: 0;
         .chat-input {
             display: flex;
             flex-direction: column;
@@ -124,12 +139,19 @@
                     .icon-button {
                         &:hover {
                             background-color: $color-fill-danger-1;
-                            img {
-                                color: $color-text-on-neutral-low-danger;
+                            .icon {
+                                path {
+                                    fill: $color-text-on-neutral-low-danger;
+                                }
                             }
                         }
                         &:active {
                             background-color: $color-fill-danger-2;
+                            .icon {
+                                path {
+                                    fill: $color-text-on-neutral-low-danger;
+                                }
+                            }
                         }
                     }
                 }
@@ -151,12 +173,24 @@
                     }
                     &:hover {
                         background-color: $color-fill-primary-1;
-                        img {
-                            color: $color-text-on-neutral-low-cta;
+                        .icon {
+                            path {
+                                fill: $color-text-on-neutral-low-cta!important;
+                            }
                         }
                     }
                     &:active {
                         background-color: $color-fill-primary-2;
+                        .icon {
+                            path {
+                                fill: $color-text-on-neutral-low-cta;
+                            }
+                        }
+                    }
+                    .icon {
+                        width: 18px;
+                        height: 18px;
+                        fill: $color-text-on-neutral-low-default;
                     }
                 }
                 .image-preview img {

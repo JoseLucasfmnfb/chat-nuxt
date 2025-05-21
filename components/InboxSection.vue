@@ -42,7 +42,7 @@
         padding: 0 8px 0 8px;
         .inboxTittle{
             border-bottom: solid 1px $color-border-neutral-1;
-            padding: 0 16px 14px;
+            padding: 0 16px;
             height: 64px;
             display: flex;
             align-items: center;

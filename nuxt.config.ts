@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import svgLoader from 'vite-svg-loader'
 export default defineNuxtConfig({
 	compatibilityDate: '2025-05-15',
 	devtools: { enabled: true },
@@ -14,6 +15,7 @@ export default defineNuxtConfig({
 		}
 	}, 
 	vite: {
+		plugins: [svgLoader()],
 		css: {
 			preprocessorOptions: {
 				scss: {
@@ -21,8 +23,20 @@ export default defineNuxtConfig({
 				},
 			},
 		},
+		server: {
+			allowedHosts: true,
+		}
 	},
-
+	runtimeConfig: {
+		public: {
+			CLIENT_ID: process.env.CLIENT_ID,
+			CLIENT_SECRET: process.env.CLIENT_SECRET,
+			REDIRECT_URI: process.env.REDIRECT_URI,
+			TOKEN_ENDPOINT: process.env.TOKEN_ENDPOINT,
+			AUTH_URL: process.env.AUTH_URL,
+			BASE_API_URL: process.env.BASE_API_URL,
+		}
+	},
 	modules: [
 		'@nuxt/content',
 		'@nuxt/eslint',

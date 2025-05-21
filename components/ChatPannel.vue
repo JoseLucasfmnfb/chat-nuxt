@@ -12,7 +12,10 @@
 
 <style lang="scss" scoped>
     .chatPannel{
-        width: stretch;
-        height: 788px;
+        display: flex;
+        flex-direction: column;
+        height: 100vh; // ocupa a tela inteira
+        max-height: 97vh;
+        width: 100%;
     }
 </style>
