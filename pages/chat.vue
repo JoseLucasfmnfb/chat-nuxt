@@ -6,7 +6,10 @@
 </template>
 
 <script setup>
-
+    const token = useCookie('access_token').value
+    if (!token) {
+        navigateTo('/')
+    }
 </script>
 
 <style lang="scss" scoped>
