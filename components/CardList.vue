@@ -34,6 +34,8 @@
         flex-direction: column;
         gap: 4px;
         padding: 8px 0;
+        max-height: 87vh;
+        overflow-y: auto;
     }
 
     .card {
